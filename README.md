@@ -737,3 +737,9 @@ This repository represents an evolving companion architecture rather than a fini
 [^groq-rate-limits]: [Groq Rate Limits](https://console.groq.com/docs/rate-limits)
 [^groq-model-card]: [Groq Llama 4 Scout Model Card](https://console.groq.com/docs/model/meta-llama/llama-4-scout-17b-16e-instruct)
 [^groq-models]: [Groq Supported Models](https://console.groq.com/docs/models)
+
+## Companion AI Architecture Essay
+
+A comparative psychological and philosophical study of Echo, Mistik, and Grok, explaining how Echo and Mistik filter LLM output through values, restraint, identity, and companion-safety architecture.
+
+[Read the Companion AI Architecture Essay](docs/Companion_AI_Architecture_Essay.pdf)
