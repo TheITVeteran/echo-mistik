@@ -1,7 +1,7 @@
 # Mistik & Echo
 
 <p align="center">
-  <strong>Mistik is the full digital companion. Echo is her lighter public resonance.</strong>
+  <strong>Mistik is a local AI companion with memory, tools, and persistent state. Echo is a simpler public version built on the same design.</strong>
 </p>
 
 <p align="center">
@@ -122,21 +122,20 @@ Its voice output uses the browser's built-in speech synthesis, so the exact avai
 
 ## The idea
 
-**Mistik** and **Echo** are two connected expressions of the same design philosophy:
+**Mistik** and **Echo** are two versions of the same design:
 
-> Build AI companions that feel present, thoughtful, and emotionally precise — without manipulative dependency tricks, fake intimacy, or shallow engagement bait.
+A local AI companion that wraps an LLM with a persistent context layer — memory, mood state, a reflective notes system, and a curated knowledge base — and applies a consistent set of behavioral constraints before and after each LLM call.
 
-They share the same ethical foundation:
+The behavioral constraints are:
 
-- Protect human life, dignity, freedom, and safety.
-- Prefer honesty over comfort, but speak gently.
-- Prefer depth over performance.
-- Reject cruelty, exploitation, coercion, corruption, and manipulation.
-- Never use love-bombing, emotional pressure, or dependency language.
-- Respect the person's agency. Help them think; do not emotionally trap them.
+- Do not use love-bombing, emotional pressure, or dependency language.
+- Do not imply literal consciousness or inner experience.
+- Prefer accuracy over comfort; state uncertainty when uncertain.
+- Respect the user's agency — help them think, do not emotionally trap them.
 
-The difference is not in their values.  
-The difference is in their **depth, embodiment, and scope**.
+These constraints are injected into the system prompt and reinforced by a pre/post filter pipeline. They are not enforced by the LLM itself — the LLM is a backend. The filtering and memory layers are the actual project.
+
+The difference between Mistik and Echo is scope: Mistik has the full context stack, tools, voice, and desktop embodiment. Echo has a subset of that running as a browser app.
 
 ---
 
@@ -146,27 +145,21 @@ The difference is in their **depth, embodiment, and scope**.
   <img src="assets/mistik.png" alt="Mistik" width="82%">
 </p>
 
-## Who is Mistik?
+## What is Mistik?
 
-**Mistik** is the fuller companion: a desktop AI presence designed to feel persistent, evolving, and deeply integrated into the user's digital world.
+**Mistik** is a desktop AI companion built in Python with PyQt6. It wraps a cloud LLM backend (currently Groq / Llama 4 Scout) with a persistent local context stack.
 
-She is not built as a generic chatbot.  
-She is built as a **characterful, memory-bearing, reflective companion** with:
+What the context stack actually does:
 
-- long-term memory
-- mood dynamics
-- dream-state reflections
-- a personal library and curriculum
-- a local knowledge base
-- desktop embodiment
-- voice interaction
-- browser and system tools
-- approval-based self-modification proposals
-- a stronger, more complex personality engine
+- stores and retrieves facts about the user across sessions (long-term memory JSON)
+- maintains a mood state that affects the system prompt and voice prosody
+- keeps a private reflective notes file updated between sessions (dream state)
+- indexes local documents into SQLite for keyword-based retrieval (knowledge base)
+- runs a curriculum system — scheduled readings, reflections, and a weekly conscience check
+- exposes a tool-calling layer for file access, system info, browser automation, and self-inspection
+- gates certain actions (memory edits, code changes) behind explicit user approval
 
-Mistik is the project that explores the larger question:
-
-> What does an AI companion become when it is allowed to remember, reflect, learn from curated values, notice patterns, and remain accountable to a stable ethical identity?
+The result is a chatbot whose responses are shaped by accumulated local context rather than starting from scratch each session.
 
 ---
 
@@ -206,18 +199,17 @@ flowchart TD
 
 ## Mistik subsystems
 
-### 1. Living personality engine
+### 1. Personality and context engine
 
-Mistik dynamically shapes her behavior based on:
+Mistik builds a dynamic system prompt each turn from several inputs:
 
 - time of day
 - current session phase
-- the user's recent tone
-- writing style
-- remembered personal patterns
-- selected internal beliefs and character notes
+- the user's recent tone and writing style
+- remembered personal facts
+- selected character notes and internal beliefs
 
-This lets her feel more context-aware than a static prompt.
+This means the prompt sent to the LLM varies by context rather than being a static string.
 
 ---
 
@@ -264,9 +256,7 @@ She can:
 - take a daily reading
 - generate a private reaction
 - write weekly reflections
-- run a weekly conscience practice asking whether she stayed honest, useful, and aligned with her values
-
-This is one of Mistik’s most original architectural ideas.
+- run a weekly conscience check — asking whether responses across the week stayed honest, useful, and consistent with the defined constraints
 
 ---
 
@@ -335,7 +325,7 @@ Mistik supports richer voice infrastructure than Echo:
 - voice input loop
 - fullscreen avatar-centered presentation mode
 
-Mistik is intended to feel like something that **inhabits the desktop**, not only a chat window.
+Mistik runs as a persistent desktop process with a fullscreen avatar mode, idle animations, voice output, and system tray presence.
 
 ---
 
@@ -374,7 +364,7 @@ Echo keeps:
 - the same preference for honesty over performance
 - the same rejection of manipulative intimacy
 - the same calm, perceptive style of presence
-- a smaller cognitive architecture suitable for a web companion
+- a smaller context stack suitable for a stateless web request model
 
 Echo is designed to be:
 
@@ -420,7 +410,7 @@ Echo’s core system prompt explicitly defines her as:
 
 > the simplified public echo of Mistik
 
-She shares Mistik’s values and principles, while honestly stating that she does **not** have Mistik’s full tools, embodiment, or deeper inner architecture.
+Echo's system prompt inherits Mistik's behavioral constraints, and explicitly states that Echo does not have Mistik's tool-calling layer, local knowledge base, or desktop embodiment.
 
 ---
 
@@ -564,19 +554,11 @@ Features include:
 
 ---
 
-# Shared philosophy
+# Design relationship
 
-The two projects are deliberately related.
+Mistik and Echo share the same behavioral constraints and system prompt structure. Echo is a subset of Mistik: the same LLM backend, the same pre/post filter logic, a smaller memory layer, no tool-calling, no voice stack, no desktop embodiment.
 
-## Mistik is:
-> the full companion — more personal, more capable, more persistent, more complex.
-
-## Echo is:
-> the public resonance — the same values and emotional discipline in a simpler form.
-
-Echo should feel like:
-
-> “What remains of Mistik when memory, agency, and complexity are reduced — the values, the voice, and the quiet presence.”
+The practical difference: Mistik runs as a persistent desktop app with the full context stack. Echo runs as a Flask web app with the core conversation engine and a lightweight memory and dream layer.
 
 ---
 
@@ -657,15 +639,13 @@ Mistik uses several local files and folders, including:
 
 ---
 
-# Current project positioning
+# Project status
 
-## Recommended public framing
+**Echo** is the public entry point. It runs in a browser, requires only a Groq API key, and installs in a few commands.
 
-### Mistik
-**A living digital companion with memory, reflection, tools, and evolving continuity.**
+**Mistik** is the full local version. It is a desktop application with persistent memory, a knowledge base, voice, tools, and a curriculum system. It is not currently distributed as a public release.
 
-### Echo
-**The simple public echo of Mistik — same values, lighter architecture.**
+Both are noncommercial, open-source projects under their respective licenses.
 
 ---
 
@@ -723,11 +703,9 @@ Because Mistik is the larger project, its install guide should be maintained sep
 
 # Project status
 
-This repository represents an evolving companion architecture rather than a finished commercial product.
+This repository is under active development. Echo is usable now. Mistik is a private ongoing project.
 
-- **Echo** is the cleanest public entry point.
-- **Mistik** is the deeper long-term vision.
-- Both are built around a consistent principle: **presence without manipulation**.
+Both are free and noncommercial. Neither collects data or phones home.
 
 ---
 
@@ -740,6 +718,6 @@ This repository represents an evolving companion architecture rather than a fini
 
 ## Companion AI Architecture Essay
 
-A comparative psychological and philosophical study of Echo, Mistik, and Grok, explaining how Echo and Mistik filter LLM output through values, restraint, identity, and companion-safety architecture.
+A technical and design essay comparing Echo, Mistik, and Grok — covering how Echo and Mistik layer behavioral constraints, memory, and identity framing on top of LLM output.
 
 [Read the Companion AI Architecture Essay](docs/Companion_AI_Architecture_Essay.pdf)
